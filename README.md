@@ -4,9 +4,9 @@ A modern, responsive website for Car Jewels, a premium car accessories and tires
 
 ## Todo
 - [ ] update emoji icons with favicons
-- [ ] hover in the our categories section
+- [x] hover in the our categories section
 - [ ] images to the banner
-- [ ] contact details and whatsapp direct open
+- [x] contact details and whatsapp direct open
 
 
 ## 🌟 Features
