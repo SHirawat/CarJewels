@@ -117,6 +117,117 @@
             background: white;
         }
 
+        /* Tire companies full-page overlay styles */
+        .tire-companies-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tire-companies-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .tire-companies-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 1000px;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .tire-companies-overlay.show .tire-companies-modal {
+            transform: scale(1);
+        }
+
+        .tire-companies-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #dc8a00;
+        }
+
+        .tire-companies-header h4 {
+            color: #dc8a00;
+            font-size: 2rem;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .close-button {
+            background: #dc8a00;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(220, 138, 0, 0.3);
+        }
+
+        .tire-companies-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .tire-companies-list li {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            cursor: pointer;
+            min-height: 120px;
+        }
+
+        .tire-companies-list li:hover {
+            background: white;
+            border-color: #dc8a00;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(220, 138, 0, 0.2);
+        }
+
+        .tire-brand-image {
+            max-width: 100%;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .tires-card {
+            position: relative;
+        }
+
         .category-icon {
             font-size: 3rem;
             margin-bottom: 15px;
@@ -378,6 +489,37 @@
             .footer-content {
                 grid-template-columns: 1fr;
             }
+
+            .tire-companies-modal {
+                width: 95vw;
+                max-width: 95vw;
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .tire-companies-header h4 {
+                font-size: 1.5rem;
+            }
+
+            .close-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .tire-companies-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .tire-companies-list li {
+                padding: 15px;
+                min-height: 100px;
+            }
+
+            .tire-brand-image {
+                max-height: 60px;
+            }
         }
     </style>
 </head>
@@ -407,15 +549,10 @@
         <div class="container">
             <h2 class="section-title">Our Categories</h2>
             <div class="category-grid">
-                <div class="category-card">
+                <div class="category-card tires-card" onclick="showTireCompanies()">
                     <div class="category-icon">🛞</div>
                     <h3>Tires</h3>
                     <p>Premium tires for all vehicle types</p>
-                </div>
-                <div class="category-card">
-                    <div class="category-icon">🔧</div>
-                    <h3>Car Parts</h3>
-                    <p>Genuine and aftermarket parts</p>
                 </div>
                 <div class="category-card">
                     <div class="category-icon">✨</div>
@@ -579,6 +716,27 @@
         </div>
     </footer>
 
+    <!-- Tire Companies Full-Page Overlay -->
+    <div class="tire-companies-overlay" id="tireCompaniesOverlay">
+        <div class="tire-companies-modal">
+            <div class="tire-companies-header">
+                <h4>Our Tire Brands</h4>
+                <button class="close-button" onclick="hideTireCompanies()" title="Close">×</button>
+            </div>
+            <ul class="tire-companies-list">
+                <li><img src="assets/images/tire/GoodYear-Tyres.jpg" alt="Goodyear" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/Bridgestone-Logo.png" alt="Bridgestone" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/CEAT_Logo.svg.png" alt="CEAT" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/Pirelli-logo.png" alt="Pirelli" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/Yokohama-Logo.jpg" alt="Yokohama" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/JK_Tyre_vector_Logo_logoshape.com_.png" alt="JK Tyre" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/images 1.png" alt="Tire Brand" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/images 112.png" alt="Tire Brand" class="tire-brand-image"></li>
+                <li><img src="assets/images/tire/images.png" alt="Tire Brand" class="tire-brand-image"></li>
+            </ul>
+        </div>
+    </div>
+
     <!-- End of Selection -->
 ```
 
@@ -598,6 +756,39 @@
         function orderProduct(productName) {
             openWhatsApp(productName);
         }
+
+        function showTireCompanies() {
+            const overlay = document.getElementById('tireCompaniesOverlay');
+            if (overlay) {
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        }
+
+        function hideTireCompanies() {
+            const overlay = document.getElementById('tireCompaniesOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }
+        }
+
+        // Close overlay when clicking outside the modal
+        document.addEventListener('click', function(event) {
+            const overlay = document.getElementById('tireCompaniesOverlay');
+            const modal = document.querySelector('.tire-companies-modal');
+            
+            if (overlay && overlay.classList.contains('show') && event.target === overlay) {
+                hideTireCompanies();
+            }
+        });
+
+        // Close overlay with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideTireCompanies();
+            }
+        });
     </script>
 </body>
 </html>
