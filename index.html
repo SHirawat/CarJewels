@@ -145,12 +145,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.26.39_5cc3873c.jpg');
+            background-image: var(--banner-image, url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.26.39_5cc3873c.jpg'));
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1;
-            animation: bannerRotate 20s infinite;
+            transition: background-image 0.5s ease-in-out;
         }
 
         .hero::after {
@@ -164,27 +164,65 @@
             z-index: -1;
         }
 
-        @keyframes bannerRotate {
-            0% {
-                background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.26.39_5cc3873c.jpg');
-                opacity: 1;
-            }
-            25% {
-                background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.28.50_5cc990d5.jpg');
-                opacity: 1;
-            }
-            50% {
-                background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.29.46_74992001.jpg');
-                opacity: 1;
-            }
-            75% {
-                background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.31.10_6b4eb137.jpg');
-                opacity: 1;
-            }
-            100% {
-                background-image: url('assets/images/banner/WhatsApp Image 2025-10-19 at 15.26.39_5cc3873c.jpg');
-                opacity: 1;
-            }
+        .banner-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-controls:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .banner-prev {
+            left: 20px;
+        }
+
+        .banner-next {
+            right: 20px;
+        }
+
+        .banner-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .banner-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .banner-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .banner-dot:hover {
+            background: rgba(255, 255, 255, 0.8);
         }
 
         .hero h1 {
@@ -979,6 +1017,29 @@
                 background-position: center;
             }
             
+            .banner-controls {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .banner-prev {
+                left: 10px;
+            }
+            
+            .banner-next {
+                right: 10px;
+            }
+            
+            .banner-dots {
+                bottom: 15px;
+            }
+            
+            .banner-dot {
+                width: 10px;
+                height: 10px;
+            }
+            
             .hero h1 {
                 font-size: 2.2rem;
                 line-height: 1.2;
@@ -1555,6 +1616,18 @@
                 <p>Your One-Stop Shop for All Car Needs</p>
             </div>
         </div>
+        
+        <!-- Banner Controls -->
+        <button class="banner-controls banner-prev" onclick="changeBanner(-1)">‹</button>
+        <button class="banner-controls banner-next" onclick="changeBanner(1)">›</button>
+        
+        <!-- Banner Dots -->
+        <div class="banner-dots">
+            <span class="banner-dot active" onclick="goToBanner(0)"></span>
+            <span class="banner-dot" onclick="goToBanner(1)"></span>
+            <span class="banner-dot" onclick="goToBanner(2)"></span>
+            <span class="banner-dot" onclick="goToBanner(3)"></span>
+        </div>
     </section>
 
     <section class="categories" id="categories">
@@ -1887,6 +1960,62 @@
         function orderProduct(productName) {
             openWhatsApp(productName);
         }
+
+        // Banner control functionality
+        let currentBannerIndex = 0;
+        let bannerInterval;
+        const bannerImages = [
+            'assets/images/banner/WhatsApp Image 2025-10-19 at 15.26.39_5cc3873c.jpg',
+            'assets/images/banner/WhatsApp Image 2025-10-19 at 15.28.50_5cc990d5.jpg',
+            'assets/images/banner/WhatsApp Image 2025-10-19 at 15.29.46_74992001.jpg',
+            'assets/images/banner/WhatsApp Image 2025-10-19 at 15.31.10_6b4eb137.jpg'
+        ];
+
+        function changeBanner(direction) {
+            currentBannerIndex += direction;
+            
+            if (currentBannerIndex >= bannerImages.length) {
+                currentBannerIndex = 0;
+            } else if (currentBannerIndex < 0) {
+                currentBannerIndex = bannerImages.length - 1;
+            }
+            
+            updateBanner();
+            resetBannerInterval();
+        }
+
+        function goToBanner(index) {
+            currentBannerIndex = index;
+            updateBanner();
+            resetBannerInterval();
+        }
+
+        function updateBanner() {
+            const heroElement = document.querySelector('.hero::before');
+            const hero = document.querySelector('.hero');
+            
+            // Update background image
+            hero.style.setProperty('--banner-image', `url('${bannerImages[currentBannerIndex]}')`);
+            
+            // Update dots
+            const dots = document.querySelectorAll('.banner-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentBannerIndex);
+            });
+        }
+
+        function resetBannerInterval() {
+            clearInterval(bannerInterval);
+            bannerInterval = setInterval(() => {
+                changeBanner(1);
+            }, 5000); // 5 seconds per image
+        }
+
+        // Initialize banner on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBanner();
+            resetBannerInterval();
+        });
 
         function showTireCompanies() {
             const overlay = document.getElementById('tireCompaniesOverlay');
